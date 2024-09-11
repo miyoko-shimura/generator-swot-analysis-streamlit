@@ -20,7 +20,7 @@ def generate_swot_section(prompt):
         return ""
 
     try:
-        response = openai.completions.create(
+        response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",  # GPT-4に変更可能
             messages=[
                 {"role": "system", "content": "You are a helpful assistant that generates SWOT analysis."},
@@ -28,7 +28,7 @@ def generate_swot_section(prompt):
             ],
             max_tokens=150
         )
-        return response['choices'][0]['message']['content'].strip()
+        return response.choices[0].message.content.strip()
     except Exception as e:
         st.error(f"Error: {str(e)}")
         return ""
