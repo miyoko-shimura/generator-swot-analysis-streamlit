@@ -18,12 +18,16 @@ def generate_swot_section(prompt):
     if not openai_api_key:
         st.error("Please enter your OpenAI API key in the sidebar.")
         return ""
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=prompt,
+
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",  # または gpt-4 など、使用したいモデルに応じて
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant that generates SWOT analysis."},
+            {"role": "user", "content": prompt}
+        ],
         max_tokens=150
     )
-    return response.choices[0].text.strip()
+    return response.choices[0].message['content'].strip()
 
 # PowerPoint ファイルを作成する関数
 def create_ppt(swot_data, company_name):
