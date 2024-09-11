@@ -9,9 +9,8 @@ from pptx.util import Inches
 st.sidebar.title("Settings")
 openai_api_key = st.sidebar.text_input("Enter your OpenAI API key", type="password")
 
-# OpenAI APIキーの設定
-if openai_api_key:
-    openai.api_key = openai_api_key
+# OpenAI APIクライアントの設定
+client = openai.OpenAI(api_key=openai_api_key)
 
 # ChatGPT API からSWOTの各セクションを生成
 def generate_swot_section(prompt):
@@ -20,7 +19,7 @@ def generate_swot_section(prompt):
         return ""
 
     try:
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",  # GPT-4に変更可能
             messages=[
                 {"role": "system", "content": "You are a helpful assistant that generates SWOT analysis."},
