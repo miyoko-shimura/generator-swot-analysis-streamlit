@@ -20,7 +20,7 @@ def generate_swot_section(prompt):
         return ""
 
     try:
-        response = openai.ChatCompletion.create(
+        response = openai.chat_completions.create(
             model="gpt-3.5-turbo",  # GPT-4に変更可能
             messages=[
                 {"role": "system", "content": "You are a helpful assistant that generates SWOT analysis."},
