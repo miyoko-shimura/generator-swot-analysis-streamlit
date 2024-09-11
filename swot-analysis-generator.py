@@ -5,12 +5,15 @@ from pptx import Presentation
 from io import BytesIO
 from pptx.util import Inches
 
+# Add a warning about using an older version of the OpenAI library
+st.warning("This application uses an older version of the OpenAI library (v0.28). Please consider updating to the latest version in the future.")
+
 # サイドバーにOpenAI APIキーを入力
 st.sidebar.title("Settings")
 openai_api_key = st.sidebar.text_input("Enter your OpenAI API key", type="password")
 
-# OpenAI APIクライアントの設定
-client = openai.OpenAI(api_key=openai_api_key)
+# OpenAI APIキーの設定
+openai.api_key = openai_api_key
 
 # ChatGPT API からSWOTの各セクションを生成
 def generate_swot_section(prompt):
@@ -19,7 +22,7 @@ def generate_swot_section(prompt):
         return ""
 
     try:
-        response = client.chat.completions.create(
+        response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",  # GPT-4に変更可能
             messages=[
                 {"role": "system", "content": "You are a helpful assistant that generates SWOT analysis."},
@@ -27,7 +30,7 @@ def generate_swot_section(prompt):
             ],
             max_tokens=150
         )
-        return response.choices[0].message.content.strip()
+        return response.choices[0].message['content'].strip()
     except Exception as e:
         st.error(f"Error: {str(e)}")
         return ""
@@ -118,3 +121,6 @@ if st.button("Generate SWOT Analysis"):
                 file_name=f'{company_name}_SWOT_Analysis.pptx',
                 mime='application/vnd.openxmlformats-officedocument.presentationml.presentation'
             )
+
+# Add a note about updating the OpenAI library
+st.info("Note: To use the latest version of the OpenAI library, you'll need to update this code. Please refer to the OpenAI Python library documentation for the most recent usage instructions.")
